@@ -5,10 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.embededsoftware.R
+import com.example.embededsoftware.databinding.FragmentAlramBinding
+import com.example.embededsoftware.databinding.FragmentDeliveryBinding
 import com.example.embededsoftware.databinding.FragmentHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -18,12 +19,13 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
+ * Use the [deliveryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class AlramFragment : Fragment() {
 
-    private lateinit var binding : FragmentHomeBinding
+
+    private lateinit var binding : FragmentAlramBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,22 +37,22 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_alram, container, false)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding.HomeTap.setOnClickListener{
+
+            it.findNavController().navigate(R.id.action_alramFragment_to_homeFragment)
+        }
 
         binding.pakageTap.setOnClickListener{
 
-            it.findNavController().navigate(R.id.action_homeFragment_to_deliveryFragment)
-        }
-
-        binding.AlramTap.setOnClickListener{
-
-            it.findNavController().navigate(R.id.action_homeFragment_to_alramFragment)
+            it.findNavController().navigate(R.id.action_alramFragment_to_deliveryFragment)
         }
 
         // Inflate the layout for this fragment
         return binding.root
     }
+
 
 
 }
