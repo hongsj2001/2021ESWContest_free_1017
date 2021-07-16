@@ -17,7 +17,7 @@
             app:layout_constraintBottom_toTopOf="@+id/linearlayout"
             app:layout_constraintStart_toStartOf="parent"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:weightSum="3">
 
 
             <LinearLayout
@@ -45,10 +45,6 @@
                 android:layout_weight="1"
                 android:src="@drawable/home" />
 
-            <LinearLayout
-                android:layout_width="0.5dp"
-                android:layout_height="60dp"
-                android:background="@color/white" />
 
             <ImageView
                 android:id="@+id/pakageTap"
@@ -56,6 +52,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/delivery" />
+
+            <ImageView
+                android:id="@+id/AlramTap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_free_icon_delivery_courier_3178814" />
 
 
         </LinearLayout>

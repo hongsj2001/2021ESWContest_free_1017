@@ -43,6 +43,11 @@ class deliveryFragment : Fragment() {
             it.findNavController().navigate(R.id.action_deliveryFragment_to_homeFragment)
         }
 
+        binding.AlramTap.setOnClickListener{
+
+            it.findNavController().navigate(R.id.action_deliveryFragment_to_alramFragment)
+        }
+
         // Inflate the layout for this fragment
         return binding.root
     }

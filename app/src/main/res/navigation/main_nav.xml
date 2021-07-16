@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_deliveryFragment"
             app:destination="@id/deliveryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_alramFragment"
+            app:destination="@id/alramFragment" />
     </fragment>
     <fragment
         android:id="@+id/deliveryFragment"
@@ -22,5 +25,23 @@
         <action
             android:id="@+id/action_deliveryFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_deliveryFragment_to_alramFragment"
+            app:destination="@id/alramFragment" />
+        <action
+            android:id="@+id/action_deliveryFragment_to_alramFragment2"
+            app:destination="@id/alramFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/alramFragment"
+        android:name="com.example.embededsoftware.fragments.AlramFragment"
+        android:label="fragment_alram"
+        tools:layout="@layout/fragment_alram" >
+        <action
+            android:id="@+id/action_alramFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_alramFragment_to_deliveryFragment"
+            app:destination="@id/deliveryFragment" />
     </fragment>
 </navigation>
