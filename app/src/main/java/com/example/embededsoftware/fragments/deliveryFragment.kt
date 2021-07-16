@@ -1,15 +1,23 @@
 package com.example.embededsoftware.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import com.example.embededsoftware.Model
 import com.example.embededsoftware.R
 import com.example.embededsoftware.databinding.FragmentDeliveryBinding
 import com.example.embededsoftware.databinding.FragmentHomeBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,6 +49,7 @@ class deliveryFragment : Fragment() {
         binding.HomeTap.setOnClickListener{
 
             it.findNavController().navigate(R.id.action_deliveryFragment_to_homeFragment)
+
         }
 
         binding.AlramTap.setOnClickListener{
