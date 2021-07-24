@@ -33,7 +33,8 @@ class HomeFragment : Fragment() {
 
 
 
-    val list = mutableListOf<Model>()
+    val data = ArrayList<String>()
+
     private lateinit var binding : FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,54 +67,45 @@ class HomeFragment : Fragment() {
             loadingDialog?.show()
 
 
-           if (list[0].title.contains("2")) { //임의로 넣은거 이것도!!
-               loadingDialog?.dismiss()
+            if (data[0].contains("2")) { //임의로 넣은거 이것도!! 이 경우 일때 택배수령이 확인되었습니다 메시지 뜨게..!
+                loadingDialog?.dismiss()
+                val database = Firebase.database
+                val myRef = database.getReference("pakage")
+                myRef.push().setValue("택배가 도착했습니다")
+                getData()
             }
+            //val adapter = deliveryAdapter()
+
 
 
         }
         binding.btnArduino.setOnClickListener{
             val database = Firebase.database
-            val myRef = database.getReference("message")
-            myRef.setValue(Model("2"))
+            val myRef = database.getReference("arduino")
+            myRef.setValue("2")
             getData()
         }
 
-        // Inflate the layout for this fragment
         return binding.root
     }
+
     fun getData() {
 
         val database = Firebase.database
-        val myRef = database.getReference("message")
+        val myRef = database.getReference("arduino")
         val postListener = object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
                 Log.d("MainActivity", dataSnapshot.toString())
-                list.add(dataSnapshot.getValue(Model::class.java)!!)
-                binding.tvCount.setText("${list[0].title}개")
-
-                if(list.isEmpty()){
-                    binding.tvCount.setText("0개")
-                }
-                // ...
-//                for (dataModel in dataSnapshot.children){
-//                    val item = dataModel.getValue(Model::class.java)!!
-//                    findViewById<TextView>(R.id.tv_count)!!.text = dataModel.children.toString()
-//                }
-
-
-//val text = findViewById<TextView>(R.id.tv_count)
-                //text!!.text = dataModel.getValue(Model::class.java).toString()
+                data.add(dataSnapshot.getValue().toString()!!)
+                binding.tvCount.setText("${data[0]}개")
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
                 Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException())
             }
         }
         myRef.addValueEventListener(postListener)
     }
-
 }

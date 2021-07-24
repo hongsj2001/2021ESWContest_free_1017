@@ -42,7 +42,7 @@
                 android:id="@+id/btn_pakageGet"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:src="@drawable/record"
+                android:src="@drawable/button_click"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="delivery"
+        android:text="Delivery"
         android:textSize="30dp"
         android:textColor="@color/black"
         android:gravity="center_vertical"/>

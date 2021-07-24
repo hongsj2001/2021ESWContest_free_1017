@@ -22,9 +22,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
 
     val list = mutableListOf<Model>()
+    val data = ArrayList<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
 
 
         super.onCreate(savedInstanceState)
@@ -41,13 +43,47 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+        getData()
+
+        val database = Firebase.database                    //
+        val myRef = database.getReference("arduino")  // 아두이노 값은 여길로
+        myRef.setValue("0")
+
+        val myRefa = database.getReference("pakage")  //
+        myRefa.setValue(Model("택배없음"))
 
 
-            val database = Firebase.database
-            val myRef = database.getReference("message")
-            myRef.setValue(Model("1"))  //임의로 넣은 것!!!!!!!!!
 
 
+    }
+
+    fun getData() {
+
+        val database = Firebase.database
+        val myRef = database.getReference("pakage")
+        val postListener = object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Get Post object and use the values to update the UI
+                Log.d("MainActivity", dataSnapshot.toString())
+
+                for(dataModel in dataSnapshot.children) {
+                    data.add(dataModel.getValue().toString()!!)
+                }
+
+//                if(data[0] in "택배가 도착했습니다"){
+//                    val database = Firebase.database
+//                    val myRef = database.getReference("pakage2")
+//                    myRef.push().setValue("본인수령")
+//                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        myRef.addValueEventListener(postListener)
     }
 
 //    fun getData() {
