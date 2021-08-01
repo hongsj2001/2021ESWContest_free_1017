@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.deliveryFragment">
@@ -20,6 +20,66 @@
                 android:textSize="50dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/check_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수령확인"
+                app:layout_constraintBottom_toBottomOf="@+id/text_pakage"
+                app:layout_constraintStart_toStartOf="@+id/text_pakage" />
+            <Button
+                android:id="@+id/othercheck_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="타인수령확인"
+                app:layout_constraintBottom_toBottomOf="@+id/text_pakage"
+                app:layout_constraintStart_toStartOf="@+id/text_pakage" />
+            <Button
+                android:id="@+id/thief_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="도난확인"
+                app:layout_constraintBottom_toBottomOf="@+id/text_pakage"
+                app:layout_constraintEnd_toEndOf="@+id/text_pakage" />
+
+            <TextView
+                android:id="@+id/theif_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="도난 시각"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_pakage" />
+
+            <TextView
+                android:id="@+id/thiefTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="time"
+                app:layout_constraintStart_toEndOf="@id/theif_tv"
+                app:layout_constraintTop_toBottomOf="@id/theif_tv"
+                app:layout_constraintTop_toTopOf="@id/theif_tv"
+                android:layout_marginLeft="10dp" />
+            <TextView
+                android:id="@+id/theifCheck_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="도난 확인 시각"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/theif_tv" />
+            <TextView
+                android:id="@+id/thiefCheckTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="time"
+                app:layout_constraintStart_toEndOf="@id/theifCheck_tv"
+                app:layout_constraintTop_toBottomOf="@id/theifCheck_tv"
+                app:layout_constraintTop_toTopOf="@id/theifCheck_tv"
+                android:layout_marginLeft="10dp" />
+
+
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"

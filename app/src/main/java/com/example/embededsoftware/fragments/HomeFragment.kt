@@ -18,6 +18,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.*
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,12 +70,16 @@ class HomeFragment : Fragment() {
             loadingDialog?.show()
 
 
-            if (data[0].contains("2")) { //임의로 넣은거 이것도!! 이 경우 일때 택배수령이 확인되었습니다 메시지 뜨게..!
+            if (data[0].contains("2")) { //버튼을 누른상태에서 집에 있는 내가 택배를 들었을 때!!!!! 아두이노가 파이어베이스로 값을 보낸다. 이때 아래와 같이 작동
                 loadingDialog?.dismiss()
-                val database = Firebase.database
-                val myRef = database.getReference("pakage")
-                myRef.push().setValue("택배가 도착했습니다")
                 getData()
+                val database = Firebase.database
+                val myRef2 = database.getReference("pakage")
+                myRef2.push().setValue("택배 도난이 의심됩니다.")
+
+                val myRef3 = database.getReference("Time")
+                myRef3.setValue(getTime())
+
             }
             //val adapter = deliveryAdapter()
 
@@ -83,10 +90,19 @@ class HomeFragment : Fragment() {
             val database = Firebase.database
             val myRef = database.getReference("arduino")
             myRef.setValue("2")
+
+
             getData()
         }
 
         return binding.root
+    }
+
+    fun getTime() : String{
+        val currentDateTime = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA).format(currentDateTime)
+
+        return dateFormat
     }
 
     fun getData() {

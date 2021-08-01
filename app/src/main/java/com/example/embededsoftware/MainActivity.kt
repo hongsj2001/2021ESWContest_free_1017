@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         myRef.setValue("0")
 
         val myRefa = database.getReference("pakage")  //
-        myRefa.setValue(Model("택배없음"))
+        myRefa.setValue(("택배없음"))
 
 
 

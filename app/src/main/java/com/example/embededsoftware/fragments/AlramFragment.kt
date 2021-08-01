@@ -18,6 +18,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +36,7 @@ class AlramFragment : Fragment() {
 
 
     val data = ArrayList<String>()
+    val Time = ArrayList<String>()
 
     private lateinit var binding : FragmentAlramBinding
 
@@ -48,6 +52,14 @@ class AlramFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_alram, container, false)
 
+        binding.checkBtn.setVisibility(View.INVISIBLE)
+        binding.othercheckBtn.setVisibility(View.INVISIBLE)
+        binding.thiefBtn.setVisibility(View.INVISIBLE)
+        binding.theifCheckTv.setVisibility(View.INVISIBLE)
+        binding.theifTv.setVisibility(View.INVISIBLE)
+        binding.thiefCheckTimeTv.setVisibility(View.INVISIBLE)
+        binding.thiefTimeTv.setVisibility(View.INVISIBLE)
+
         binding.HomeTap.setOnClickListener{
 
             it.findNavController().navigate(R.id.action_alramFragment_to_homeFragment)
@@ -57,9 +69,38 @@ class AlramFragment : Fragment() {
 
             it.findNavController().navigate(R.id.action_alramFragment_to_deliveryFragment)
         }
+        binding.checkBtn.setOnClickListener {
+            val database = Firebase.database
+            val myRef2 = database.getReference("pakage")
+            myRef2.push().setValue("버튼X 택배가 수령이 확인되었습니다.")
+        }
+        binding.othercheckBtn.setOnClickListener {
+            val database = Firebase.database
+            val myRef2 = database.getReference("pakage")
+            myRef2.push().setValue("버튼X 택배가 수령이 확인되었습니다.")
+        }
+        binding.thiefBtn.setOnClickListener {
+            TimeData()
+            val database = Firebase.database
+            val myRef2 = database.getReference("pakage")
+            myRef2.push().setValue("택배 도난이 의심됩니다.")
+            binding.thiefCheckTimeTv.text = getTime()
+            binding.theifCheckTv.setVisibility(View.VISIBLE)
+            binding.theifTv.setVisibility(View.VISIBLE)
+            binding.thiefCheckTimeTv.setVisibility(View.VISIBLE)
+        }
+
         getData()
         return binding.root
     }
+
+    fun getTime() : String{
+        val currentDateTime = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA).format(currentDateTime)
+
+        return dateFormat
+    }
+
     fun getData() {
 
         val database = Firebase.database
@@ -73,11 +114,41 @@ class AlramFragment : Fragment() {
                 for(dataModel in dataSnapshot.children) {
                     data.add(dataModel.getValue().toString()!!)
                     binding.textPakage.setText("${data[0]}")
+
+                    if(data[0] in "버튼X 택배가 수령이 확인되었습니다."){
+                        binding.checkBtn.setVisibility(View.VISIBLE)
+                    }
+                    if(data[0] in "택배 도난이 의심됩니다."){
+                        binding.othercheckBtn.setVisibility(View.VISIBLE)
+                        binding.thiefBtn.setVisibility(View.VISIBLE)
+                    }
                 }
 
 
             }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        myRef.addValueEventListener(postListener)
+    }
+    fun TimeData() {
+
+        val database = Firebase.database
+        val myRef = database.getReference("Time")
+        val postListener = object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                    Time.add(dataSnapshot.getValue().toString()!!)
+
+
+
+                binding.thiefTimeTv.text = Time[0]
+                binding.thiefTimeTv.setVisibility(View.VISIBLE)
+            }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Post failed, log a message
                 Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException())

@@ -17,6 +17,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_delivery.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,6 +92,22 @@ class deliveryFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
     }
+    fun getHour() : String{
+        val currentDateTime = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.KOREA).format(currentDateTime)
+
+        return dateFormat
+    }
+    fun getDay() : String{
+        val currentDateTime = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA).format(currentDateTime)
+
+        return dateFormat
+    }
+
+
+    // 파이어베이스에 시간 값을 넣어야한다!!!
+
     fun getData() {
 
         val database = Firebase.database
@@ -105,13 +124,22 @@ class deliveryFragment : Fragment() {
                         adapter.items.add( delivery("7월 12일", "15:15:55", "텅텅"))
                         //adapter.notifyItemInserted(adapter.items.size + 1)
                         positon = true
-
                     }
-                    if (list[0] in ("택배가 도착했습니다.")) {
+                    if (list[list.size - 1] in ("택배 수령이 확인되었습니다.")) {
 
-                        adapter.items.add(delivery("7월 12일", "15:15:55", "본인수령"))
+                        adapter.items.add(delivery(getDay(), getHour(), "본인수령"))
                         //adapter.notifyItemInserted(adapter.items.size + 1)
 
+                    }
+                    if (list[list.size - 1] in ("버튼X 택배가 수령이 확인되었습니다.")) {
+
+                        adapter.items.add(delivery(getDay(), getHour(), "지인수령"))
+                        //adapter.notifyItemInserted(adapter.items.size + 1)
+
+                    }
+                    if (list[list.size - 1] in ("택배 도난이 의심됩니다.")) {
+                        adapter.items.add(delivery(getDay(), getHour(), "도난"))
+                        //adapter.notifyItemInserted(adapter.items.size + 1)
                     }
                 }
 
