@@ -43,21 +43,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
-        getData()
-
-        val database = Firebase.database                    //
-        val myRef = database.getReference("arduino")  // 아두이노 값은 여길로
-        myRef.setValue("0")
-
-        val myRefa = database.getReference("pakage")  //
-        myRefa.setValue(("택배없음"))
-
-
-
-
     }
 
-    fun getData() {
+    /*fun getData() {
 
         val database = Firebase.database
         val myRef = database.getReference("pakage")
@@ -119,5 +107,5 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //        myRef.addValueEventListener(postListener)
-//    }
+//    }*/
 }

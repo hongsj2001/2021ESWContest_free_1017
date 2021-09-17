@@ -11,98 +11,63 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/text_pakage"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center_vertical"
+                android:layout_height="0dp"
+                app:reverseLayout="true"
+                app:stackFromEnd="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/countText" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="현재 보관중인 택배"
                 android:textColor="@color/black"
-                android:textSize="50dp"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/check_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="수령확인"
-                app:layout_constraintBottom_toBottomOf="@+id/text_pakage"
-                app:layout_constraintStart_toStartOf="@+id/text_pakage" />
-            <Button
-                android:id="@+id/othercheck_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="타인수령확인"
-                app:layout_constraintBottom_toBottomOf="@+id/text_pakage"
-                app:layout_constraintStart_toStartOf="@+id/text_pakage" />
-            <Button
-                android:id="@+id/thief_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="도난확인"
-                app:layout_constraintBottom_toBottomOf="@+id/text_pakage"
-                app:layout_constraintEnd_toEndOf="@+id/text_pakage" />
-
             <TextView
-                android:id="@+id/theif_tv"
-                android:layout_width="wrap_content"
+                android:id="@+id/countText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="도난 시각"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/textView"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_pakage" />
-
-            <TextView
-                android:id="@+id/thiefTime_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="time"
-                app:layout_constraintStart_toEndOf="@id/theif_tv"
-                app:layout_constraintTop_toBottomOf="@id/theif_tv"
-                app:layout_constraintTop_toTopOf="@id/theif_tv"
-                android:layout_marginLeft="10dp" />
-            <TextView
-                android:id="@+id/theifCheck_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="도난 확인 시각"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/theif_tv" />
-            <TextView
-                android:id="@+id/thiefCheckTime_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="time"
-                app:layout_constraintStart_toEndOf="@id/theifCheck_tv"
-                app:layout_constraintTop_toBottomOf="@id/theifCheck_tv"
-                app:layout_constraintTop_toTopOf="@id/theifCheck_tv"
-                android:layout_marginLeft="10dp" />
-
-
-
-
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                app:layout_constraintBottom_toTopOf="@+id/linearlayout"
-                app:layout_constraintStart_toStartOf="parent"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="3"
+                app:layout_constraintBottom_toTopOf="@+id/linearlayout"
+                app:layout_constraintStart_toStartOf="parent">
 
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_height="3dp"
+                    android:layout_weight="1.5" />
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="3dp"
-                    android:layout_weight="1"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="3dp"
-                    android:background="#FF9933"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1.5"
+                    android:background="#FF9933" />
             </LinearLayout>
 
             <LinearLayout
@@ -119,13 +84,6 @@
                     android:layout_weight="1"
                     android:src="@drawable/home" />
 
-
-                <ImageView
-                    android:id="@+id/pakageTap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/delivery" />
 
                 <ImageView
                     android:id="@+id/AlramTap"

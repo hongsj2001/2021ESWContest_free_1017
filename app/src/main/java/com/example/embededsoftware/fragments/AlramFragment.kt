@@ -1,5 +1,6 @@
 package com.example.embededsoftware.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,35 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
-import com.example.embededsoftware.Model
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.embededsoftware.CustomDialog
 import com.example.embededsoftware.R
 import com.example.embededsoftware.databinding.FragmentAlramBinding
-import com.example.embededsoftware.databinding.FragmentDeliveryBinding
-import com.example.embededsoftware.databinding.FragmentHomeBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.fragment_alram.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [deliveryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AlramFragment : Fragment() {
-
-
-    val data = ArrayList<String>()
-    val Time = ArrayList<String>()
+    private lateinit var databaseRef: DatabaseReference
+    private lateinit var adapter: deliveryAdapter
 
     private lateinit var binding : FragmentAlramBinding
 
@@ -52,111 +35,98 @@ class AlramFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_alram, container, false)
 
-        binding.checkBtn.setVisibility(View.INVISIBLE)
-        binding.othercheckBtn.setVisibility(View.INVISIBLE)
-        binding.thiefBtn.setVisibility(View.INVISIBLE)
-        binding.theifCheckTv.setVisibility(View.INVISIBLE)
-        binding.theifTv.setVisibility(View.INVISIBLE)
-        binding.thiefCheckTimeTv.setVisibility(View.INVISIBLE)
-        binding.thiefTimeTv.setVisibility(View.INVISIBLE)
 
+        PackageCountView()
+        initView()
+
+        //탭
         binding.HomeTap.setOnClickListener{
-
             it.findNavController().navigate(R.id.action_alramFragment_to_homeFragment)
         }
 
-        binding.pakageTap.setOnClickListener{
+        databaseRef = FirebaseDatabase.getInstance().reference
 
-            it.findNavController().navigate(R.id.action_alramFragment_to_deliveryFragment)
-        }
-        binding.checkBtn.setOnClickListener {
-            val database = Firebase.database
-            val myRef2 = database.getReference("pakage")
-            myRef2.push().setValue("버튼X 택배가 수령이 확인되었습니다.")
-        }
-        binding.othercheckBtn.setOnClickListener {
-            val database = Firebase.database
-            val myRef2 = database.getReference("pakage")
-            myRef2.push().setValue("버튼X 택배가 수령이 확인되었습니다.")
-        }
-        binding.thiefBtn.setOnClickListener {
-            TimeData()
-            val database = Firebase.database
-            val myRef2 = database.getReference("pakage")
-            myRef2.push().setValue("택배 도난이 의심됩니다.")
-            binding.thiefCheckTimeTv.text = getTime()
-            binding.theifCheckTv.setVisibility(View.VISIBLE)
-            binding.theifTv.setVisibility(View.VISIBLE)
-            binding.thiefCheckTimeTv.setVisibility(View.VISIBLE)
-        }
+//        val linearLayoutManager = LinearLayoutManager(activity)
+//        linearLayoutManager.reverseLayout = true
+//        linearLayoutManager.stackFromEnd = true
+//        recyclerView?.setLayoutManager(linearLayoutManager)
 
-        getData()
+        loadData()
+        binding.recyclerView?.adapter = adapter
+
+
         return binding.root
     }
 
-    fun getTime() : String{
-        val currentDateTime = Calendar.getInstance().time
-        val dateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA).format(currentDateTime)
-
-        return dateFormat
-    }
-
-    fun getData() {
-
-        val database = Firebase.database
-        val myRef = database.getReference("pakage")
-        val postListener = object : ValueEventListener {
-
+    //현재 보관중인 택배의 갯수를 보여준다.
+    fun PackageCountView(){
+        val database : FirebaseDatabase = FirebaseDatabase.getInstance()
+        val countRef : DatabaseReference = database.getReference("count")
+        countRef.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Get Post object and use the values to update the UI
-                Log.d("MainActivity", dataSnapshot.toString())
-
-                for(dataModel in dataSnapshot.children) {
-                    data.add(dataModel.getValue().toString()!!)
-                    binding.textPakage.setText("${data[0]}")
-
-                    if(data[0] in "버튼X 택배가 수령이 확인되었습니다."){
-                        binding.checkBtn.setVisibility(View.VISIBLE)
-                    }
-                    if(data[0] in "택배 도난이 의심됩니다."){
-                        binding.othercheckBtn.setVisibility(View.VISIBLE)
-                        binding.thiefBtn.setVisibility(View.VISIBLE)
-                    }
+                val count = dataSnapshot?.value.toString()
+                if (count == "0") {
+                    binding.countText.setText("없음.")
+                } else {
+                    binding.countText.setText("${count}개")
                 }
-
-
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException())
+            override fun onCancelled(error: DatabaseError) {
+                println("Failed to read value.")
+            }
+        })
+    }
+
+    //택배 정보를 리사이클러뷰로 보여줌
+    fun initView() {
+        adapter = deliveryAdapter()
+
+        recyclerView?.adapter = adapter
+        adapter.listener = object : deliveryAdapter.OnDeliveryModelClickListener {
+            override fun onItemClick(holder: deliveryAdapter.ViewHolder?, view: View?, position: Int) {
+                val item = adapter.items[position]
+                Log.d("item",item.objectId)
+                val dialog = context?.let { CustomDialog(it) }
+                // 택배 상태가 도난 의심일 경우에만 Dialog를 띄우도록 함
+                if(item.receive == "도난 의심"){
+                    dialog?.MyDig(item.objectId)
+                }
             }
         }
-        myRef.addValueEventListener(postListener)
+        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        layoutManager.setReverseLayout(true)
+        layoutManager.setStackFromEnd(true)
+        recyclerView?.layoutManager = layoutManager
     }
-    fun TimeData() {
 
-        val database = Firebase.database
-        val myRef = database.getReference("Time")
-        val postListener = object : ValueEventListener {
-
+    // 파이어베이스에 저장된 택배 정보들을 가져와서 리사이클러뷰에 추가
+    fun loadData() {
+        val database : FirebaseDatabase = FirebaseDatabase.getInstance()
+        val dataRef : DatabaseReference = database.getReference("data")
+        dataRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d("MainActivity", dataSnapshot.toString())
+                adapter.items.clear()
+                for(dataModel in dataSnapshot.children) {
+                    val objectId = dataModel.child("objectId")?.value.toString()
+                    val arriveday = dataModel.child("arriveday")?.value.toString()
+                    val arrivetime = dataModel.child("arrivetime")?.value.toString()
+                    val receiveday = dataModel.child("receiveday")?.value.toString()
+                    val receivetime = dataModel.child("receivetime")?.value.toString()
+                    val receive = dataModel.child("receive")?.value.toString()
+                    val checkday = dataModel.child("checkday")?.value.toString()
+                    val checktime = dataModel.child("checktime")?.value.toString()
 
-                    Time.add(dataSnapshot.getValue().toString()!!)
+                    adapter.items.add(DeliveryModel(objectId, arriveday, arrivetime, receiveday, receivetime, receive,checkday,checktime))
 
-
-
-                binding.thiefTimeTv.text = Time[0]
-                binding.thiefTimeTv.setVisibility(View.VISIBLE)
+                }
+                adapter.notifyDataSetChanged()
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
                 Log.w("MainActivity", "loadPost:onCancelled", databaseError.toException())
             }
-        }
-        myRef.addValueEventListener(postListener)
+        })
     }
-
-
-
 }
