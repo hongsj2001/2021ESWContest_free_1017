@@ -41,7 +41,8 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    //현재 보관중인 택배의 갯수를 보여준다.
+    //파이어베이스의 count를 수신 대기하여 현재 보관중인 택배의 갯수를 보여준다.(count가 0보다 작으면 "현재 보관중인 택배가 없습니다" 출력,
+    //count가 0보다 크면 count의 값을 출력)
     fun PackageCountView(){
         val database : FirebaseDatabase = FirebaseDatabase.getInstance()
         val countRef : DatabaseReference = database.getReference("count")
@@ -60,7 +61,7 @@ class HomeFragment : Fragment() {
             }
         })
     }
-    // 도난이 의심되는 택배의 갯수를 보여준다.
+    // 파이어베이스의 data들을 수신하여 만일 도난 의심 상태인 택배의 수를 파악하여 도난이 의심되는 택배의 수를 보여준다.
     fun theftChcekView(){
         val database : FirebaseDatabase = FirebaseDatabase.getInstance()
         val dataRef : DatabaseReference = database.getReference("data")

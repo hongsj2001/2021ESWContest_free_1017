@@ -21,11 +21,9 @@ class PushMessageService: FirebaseMessagingService() {
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
 
-    // 파이어베이스 서비스의 토큰을 가져온다
+    //어플 최초 실행 시 파이어베이스의 "Token"으로 토큰을 날려준다
     override fun onNewToken(token: String) {
         Log.d(TAG, "new Token: $token")
-
-        //파베 연결해서 토큰 날려줘야함. 단 한번만 날린다.
         database = FirebaseDatabase.getInstance()
         databaseReference = database.getReference("Token")
         val idByANDROID: String = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)
@@ -33,8 +31,8 @@ class PushMessageService: FirebaseMessagingService() {
     }
 
     // 새로운 FCM 메시지가 있을 때 메세지를 받는다
+    // 앱이 포어그라운드 상태에서 Notificiation을 받는 경우 푸시 알람을 띄운다.
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // 앱이 포어그라운드 상태에서 Notificiation을 받는 경우
         if(remoteMessage.notification != null) {
             sendNotification(remoteMessage.notification?.body, remoteMessage.notification?.title)
         }
@@ -43,7 +41,7 @@ class PushMessageService: FirebaseMessagingService() {
         }
     }
 
-    // FCM 메시지를 보내는 메시지
+    // 푸시알람을 어떻게 띄울 것인지에 대한 부가설정 (title,body,알람 소리 등) FCM 메시지를 푸시 알람 형식(head-up 알림)으로 띄운다
     private fun sendNotification(body: String?, title: String?) {
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -54,7 +52,7 @@ class PushMessageService: FirebaseMessagingService() {
         var pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
-        // head up 알림 생성하기
+
         val notificationId = 1001
         createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_HIGH, false,
             getString(R.string.app_name), "App notification channel")
@@ -65,7 +63,7 @@ class PushMessageService: FirebaseMessagingService() {
         val fullScreenPendingIntent = PendingIntent.getActivity(baseContext, 0,
             intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        // 푸시알람 부가설정
+
         var notificationBuilder = NotificationCompat.Builder(this,channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)

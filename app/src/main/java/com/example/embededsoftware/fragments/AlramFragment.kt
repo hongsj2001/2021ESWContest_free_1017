@@ -44,13 +44,6 @@ class AlramFragment : Fragment() {
             it.findNavController().navigate(R.id.action_alramFragment_to_homeFragment)
         }
 
-        databaseRef = FirebaseDatabase.getInstance().reference
-
-//        val linearLayoutManager = LinearLayoutManager(activity)
-//        linearLayoutManager.reverseLayout = true
-//        linearLayoutManager.stackFromEnd = true
-//        recyclerView?.setLayoutManager(linearLayoutManager)
-
         loadData()
         binding.recyclerView?.adapter = adapter
 

@@ -14,6 +14,7 @@ class CustomDialog(context: Context) {
     private lateinit var database: DatabaseReference
     private val dialog = Dialog(context)
 
+    //dialog를 생성한다. dialog의 역할은 리사이클러뷰에 저장된 택배 정보들을 제어 할 수 있게 한다. 수령 확인 여부를 확인하고 수령 확인 시간을 저장한다.
     fun MyDig(Key : String){
         dialog.setContentView(R.layout.dialog)
         dialog.setCancelable(true)
@@ -46,14 +47,14 @@ class CustomDialog(context: Context) {
         }
     }
 
-    //날짜 정보를 가져온다.
+    //핸드폰의 현재 날짜 정보를 yyyy/MM/dd 형태로 가져온다.
     fun getDay() : String{
         val currentDateTime = Calendar.getInstance().time
         val dayText = SimpleDateFormat("yyyy/MM/dd", Locale.KOREA).format(currentDateTime)
 
         return dayText
     }
-    //시간 정보를 가져온다.
+    //핸드폰의 시간 정보를 HH:mm:ss 형태로 가져온다.
     fun getTime() : String{
         val currentDateTime = Calendar.getInstance().time
         val timeText = SimpleDateFormat("HH:mm:ss", Locale.KOREA).format(currentDateTime)

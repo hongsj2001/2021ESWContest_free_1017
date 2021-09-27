@@ -11,19 +11,4 @@ data class DeliveryModel(
     var receive:String="",
     var checkday:String="",
     var checktime:String=""
-) {
-
-    @Exclude
-    fun toMap(): HashMap<String, Any> {
-        val result: HashMap<String, Any> = HashMap()
-        result["objectId"] = objectId
-        result["arriveday"] = arriveday
-        result["arrivetime"] = arrivetime
-        result["receivetime"] = receivetime
-        result["receiveday"] = receiveday
-        result["receive"] = receive
-        result["checkday"] = checkday
-        result["checktime"] = checktime
-        return result
-    }
-}
+)
